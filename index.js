@@ -5,12 +5,19 @@ const cors = require("cors"); // ✅ agregá esto
 const app = express();
 
 require('dotenv').config();
-
 app.use(cors({
-    origin: "https://mozairt-app-git-main-naials-projects.vercel.app",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    origin: [
+      "https://mozairt-app-git-main-naials-projects.vercel.app",
+      "https://mozairt-app.vercel.app"
+    ],
+    methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    credentials: true
   }));
+  
+  // Preflight handler explícito
+  app.options("*", cors());
+  
   
 app.use(express.json());
 
