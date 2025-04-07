@@ -1,11 +1,19 @@
 const express = require("express");
 const fs = require("fs");
 const axios = require("axios");
+const cors = require("cors"); // ✅ agregá esto
 const app = express();
+
 require('dotenv').config();
 
-// Middleware para leer el cuerpo en JSON
+app.use(cors({
+    origin: "https://mozairt-app-git-main-naials-projects.vercel.app",
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  }));
+  
 app.use(express.json());
+
 
 // Ruta para analizar el MIDI y generar sugerencias
 app.post("/analyze", async (req, res) => {
