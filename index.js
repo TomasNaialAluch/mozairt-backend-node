@@ -31,7 +31,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Middleware para manejar OPTIONS explícitamente
-app.options('*', cors(corsOptions));
+app.options('*name', cors(corsOptions));
 
 
 app.use(express.json());
