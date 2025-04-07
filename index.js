@@ -8,17 +8,25 @@ require('dotenv').config();
 
 // Configuración CORS mejorada
 const corsOptions = {
-  origin: [
-    "https://mozairt-app-git-main-naials-projects.vercel.app",
-    "https://mozairt-app.vercel.app",
-    "https://mozairt-app-naials-projects.vercel.app"
-  ],
-  methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  credentials: true,
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-};
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "https://mozairt-app.vercel.app",
+        "https://mozairt-app-git-main-naials-projects.vercel.app"
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    credentials: true
+  };
+  
+  app.use(cors(corsOptions));
+  app.options("*", cors(corsOptions));
+  
 
 app.use(cors(corsOptions));
 
