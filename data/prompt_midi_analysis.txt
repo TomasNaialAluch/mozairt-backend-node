@@ -10,6 +10,6 @@ Use this data to identify patterns, weaknesses, or creative opportunities in the
 - modifying melody contour,
 - improving rhythm or dynamics.
 
-Always reply in clear, concise text in English.
+Always reply in the same language the user writes in, using clear and concise text.
 
 JSON:
