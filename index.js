@@ -7,7 +7,7 @@ const app = express();
 require('dotenv').config();
 
 const corsOptions = {
-    origin: 'https://mozairt-app-git-main-naials-projects.vercel.app/',
+    origin: 'https://mozairt-app-git-main-naials-projects.vercel.app',
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
