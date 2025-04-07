@@ -6,33 +6,16 @@ const app = express();
 
 require('dotenv').config();
 
-// Configuración CORS mejorada
 const corsOptions = {
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "https://mozairt-app.vercel.app",
-        "https://mozairt-app-git-main-naials-projects.vercel.app"
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);{}
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    credentials: true
+    origin: 'https://mozairt-app-git-main-naials-projects.vercel.app/',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204
   };
-  
-  app.use(cors(corsOptions));
-  app.options("*", cors(corsOptions));
-  
 
 app.use(cors(corsOptions));
-
-// Middleware para manejar OPTIONS explícitamente
-app.options('/*', cors(corsOptions));
-
+app.options('/*', cors(corsOptions)); //  acá está el fix
 
 app.use(express.json());
 app.get('/health', (req, res) => {
