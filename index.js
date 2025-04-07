@@ -15,7 +15,7 @@ const corsOptions = {
   };
 
 app.use(cors(corsOptions));
-app.options('/*', cors(corsOptions)); //  acá está el fix
+app.options('/*name', cors(corsOptions)); //  acá está el fix
 
 app.use(express.json());
 app.get('/health', (req, res) => {
@@ -56,10 +56,7 @@ app.post("/analyze", async (req, res) => {
     }
 });
 
-// Ruta de verificación de salud
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'OK' });
-});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
