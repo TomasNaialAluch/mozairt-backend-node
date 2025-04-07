@@ -43,7 +43,7 @@ app.post("/analyze", async (req, res) => {
             },
             {
                 headers: {
-                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+                    "Authorization": `Bearer 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`,
                     "Content-Type": "application/json",
                 }
             }
