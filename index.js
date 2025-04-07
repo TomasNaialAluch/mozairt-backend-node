@@ -14,7 +14,7 @@ const corsOptions = {
         "https://mozairt-app-git-main-naials-projects.vercel.app"
       ];
       if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
+        callback(null, true);{}
       } else {
         callback(new Error("Not allowed by CORS"));
       }
@@ -33,8 +33,11 @@ app.use(cors(corsOptions));
 // Middleware para manejar OPTIONS explícitamente
 app.options('*', cors(corsOptions));
 
-app.use(express.json());
 
+app.use(express.json());
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+  });
 // Ruta para analizar el MIDI
 app.post("/analyze", async (req, res) => {
     try {
