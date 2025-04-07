@@ -1,0 +1,110 @@
+{
+  "bpm": 125,
+  "key": {
+    "tonic": "C",
+    "mode": "minor",
+    "correlation": 0.78
+  },
+  "time_signature": "4/4",
+  "structure": {
+    "measures": 16,
+    "sections": [
+      {
+        "name": "A",
+        "start_step": 1,
+        "end_step": 8
+      },
+      {
+        "name": "B",
+        "start_step": 9,
+        "end_step": 16
+      }
+    ]
+  },
+  "notes": {
+    "total_notes": 64,
+    "pitch_range": {
+      "min": "C3",
+      "max": "C6"
+    },
+    "duration_distribution": {
+      "quarter": 24,
+      "eighth": 20,
+      "sixteenth": 12
+    },
+    "velocity_range": [
+      64,
+      127
+    ]
+  },
+  "harmony": {
+    "chords": [
+      {
+        "step": 1,
+        "chord": "Cm",
+        "duration": 4
+      },
+      {
+        "step": 5,
+        "chord": "G7",
+        "duration": 4
+      }
+    ]
+  },
+  "melody": {
+    "contour": "ascending",
+    "repeated_motifs": [
+      "C3-E3-G3"
+    ]
+  },
+  "style_tags": [
+    "piano",
+    "minimalist"
+  ],
+  "pianoroll_preview": [
+    {
+      "step": 1,
+      "note": "C3",
+      "duration": 1,
+      "velocity": 100
+    },
+    {
+      "step": 2,
+      "note": "E3",
+      "duration": 1,
+      "velocity": 100
+    },
+    {
+      "step": 3,
+      "note": null
+    },
+    {
+      "step": 4,
+      "note": "G3",
+      "duration": 1,
+      "velocity": 95
+    },
+    {
+      "step": 5,
+      "note": "C4",
+      "duration": 1,
+      "velocity": 110
+    },
+    {
+      "step": 6,
+      "note": "E4",
+      "duration": 1,
+      "velocity": 105
+    },
+    {
+      "step": 7,
+      "note": null
+    },
+    {
+      "step": 8,
+      "note": "G4",
+      "duration": 1,
+      "velocity": 95
+    }
+  ]
+}
