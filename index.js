@@ -7,13 +7,24 @@ const app = express();
 require('dotenv').config();
 app.use(cors({
     origin: [
-      "https://mozairt-app-git-main-naials-projects.vercel.app",
-      "https://mozairt-app.vercel.app"
+        "https://mozairt-app-git-main-naials-projects.vercel.app",
+        "https://mozairt-app.vercel.app",
+        "https://mozairt-app-naials-projects.vercel.app" // Agrega todas las variantes posibles
     ],
     methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    credentials: true
-  }));
+    credentials: true,
+    preflightContinue: true // Añade esta línea
+}));
+
+// Manejo explícito de OPTIONS
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.status(204).send();
+});
   
   // Preflight handler explícito
   app.options("*", cors());
