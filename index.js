@@ -6,6 +6,7 @@ const app = express();
 
 require('dotenv').config();
 
+
 const corsOptions = {
     origin: 'https://mozairt-app-git-main-naials-projects.vercel.app',
     methods: ['GET', 'POST', 'OPTIONS'],
@@ -43,9 +44,10 @@ app.post("/analyze", async (req, res) => {
             },
             {
                 headers: {
-                    "Authorization": `Bearer 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`,
+                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
                     "Content-Type": "application/json",
-                }
+                  }
+                  
             }
         );
 
