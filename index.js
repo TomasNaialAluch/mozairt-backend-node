@@ -38,7 +38,7 @@ app.post("/analyze", async (req, res) => {
             "https://api.openai.com/v1/completions", 
             {
                 model: "gpt-4",
-                prompt: `${prompt}\n${JSON.stringify(analysisData)}`,
+                prompt: "Hola, como estas?",
                 max_tokens: 500,
                 temperature: 0.7,
             },
