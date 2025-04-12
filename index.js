@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 
 require('dotenv').config();
-
+console.log("Clave cargada:", process.env.OPENAI_API_KEY ? "✅ Sí" : "❌ No");
 
 const corsOptions = {
     origin: 'https://mozairt-app-git-main-naials-projects.vercel.app',
