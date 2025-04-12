@@ -16,11 +16,21 @@ if (!process.env.OPENAI_API_KEY) {
 
 // Configuración de CORS
 const corsOptions = {
-    origin: 'https://mozairt-app-git-main-naials-projects.vercel.app',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    optionsSuccessStatus: 204
+  origin: function (origin, callback) {
+      const allowedOrigins = [
+          'https://mozairt-app.vercel.app',
+          'https://mozairt-app-git-main-naials-projects.vercel.app'
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true); // Permite el origen
+      } else {
+          callback(new Error('Origen no permitido por CORS')); // Bloquea el origen
+      }
+  },
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
