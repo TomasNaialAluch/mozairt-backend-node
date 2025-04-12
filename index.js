@@ -56,7 +56,8 @@ app.post("/analyze", async (req, res) => {
           );
           
 
-        res.json({ suggestions: openaiResponse.data.choices[0].text.trim() });
+        res.json(openaiResponse.data.choices[0].message.content.trim());
+    
     } catch (error) {
         console.error("Error en análisis:", error);
         res.status(500).json({ error: "Error al procesar la solicitud." });
