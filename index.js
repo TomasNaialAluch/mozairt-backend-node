@@ -42,7 +42,7 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
 });
 
-// Ruta para analizar el MIDI
+// Routa para analizar el MIDI
 app.post("/analyze", async (req, res) => {
     try {
         const userInput = req.body.prompt || "";
