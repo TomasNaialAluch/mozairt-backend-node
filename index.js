@@ -36,8 +36,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('/*name', cors(corsOptions)); // Preflight requests
 
-// Middleware para analizar texto plano
-app.use(express.text()); // Cambio aquí: Usamos express.text() para recibir texto plano
+// Middleware para analizar JSON
+app.use(express.json()); // Cambio aquí: Usamos express.json() para recibir JSON
 
 // Ruta de salud
 app.get('/health', (req, res) => {
@@ -48,17 +48,17 @@ app.get('/health', (req, res) => {
 app.post("/analyze", async (req, res) => {
     try {
         // Log para verificar si los datos del frontend llegan correctamente
-        console.log("Texto recibido del frontend:", req.body);
+        console.log("Datos recibidos del frontend:", req.body);
 
-        // El texto plano estará directamente en req.body
-        const userInput = req.body || "";
+        // Acceder al campo 'prompt' del objeto JSON
+        const userInput = req.body.prompt || "";
         if (!userInput.trim()) {
-            console.error("El texto está vacío o no válido.");
-            return res.status(400).json({ error: "El texto no puede estar vacío." });
+            console.error("El prompt está vacío o no válido.");
+            return res.status(400).json({ error: "El prompt no puede estar vacío." });
         }
 
         // Log para verificar el texto recibido
-        console.log("Texto recibido del usuario:", userInput);
+        console.log("Prompt recibido del usuario:", userInput);
 
         // Detectar tipo de mensaje y obtener el prompt adecuado
         const { categoria, prompts } = await obtenerPromptPorMensaje(userInput);
