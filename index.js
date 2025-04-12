@@ -9,11 +9,11 @@ require('dotenv').config();
 console.log("Clave cargada:", process.env.OPENAI_API_KEY ? "✅ Sí" : "❌ No");
 
 const corsOptions = {
-    origin: 'https://mozairt-app-git-main-naials-projects.vercel.app',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    optionsSuccessStatus: 204
+  origin: 'https://mozairt-app-git-main-naials-projects.vercel.app',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
@@ -21,8 +21,8 @@ app.options('/*name', cors(corsOptions)); // Opción más general para preflight
 
 app.use(express.json());
 
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok' });
+app.get('/health', cors(corsOptions), (req, res) => {
+  res.json({ status: 'ok' });
 });
 
 // Ruta para analizar el MIDI
