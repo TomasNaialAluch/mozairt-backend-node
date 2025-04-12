@@ -10,10 +10,18 @@ console.log("Clave cargada:", process.env.OPENAI_API_KEY ? "✅ Sí" : "❌ No")
 
 // Configuración CORS
 const corsOptions = {
-  origin: [
-    'https://mozairt-app-git-main-naials-projects.vercel.app',
-    'https://mozairt-app.vercel.app'
-  ],
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://mozairt-app-git-main-naials-projects.vercel.app',
+      'https://mozairt-app.vercel.app'
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  
   
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
