@@ -1,9 +1,35 @@
-const { obtenerPromptPorMensaje } = require("./utils/promptSelector");
+const express = require("express");
 const fs = require("fs");
+const axios = require("axios");
+const cors = require("cors");
+const app = express();
+const { obtenerPromptPorMensaje } = require("./utils/promptSelector");
 
+require('dotenv').config();
+console.log("Clave cargada:", process.env.OPENAI_API_KEY ? "✅ Sí" : "❌ No");
+
+// Configuración CORS
+const corsOptions = {
+  origin: 'https://mozairt-app-git-main-naials-projects.vercel.app',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+app.options('/*name', cors(corsOptions)); // fix para preflight
+
+app.use(express.json());
+
+// Endpoint de salud
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Endpoint principal: análisis y respuesta GPT
 app.post("/analyze", async (req, res) => {
   try {
-    // Configuración de cabeceras CORS
     res.header("Access-Control-Allow-Origin", corsOptions.origin);
     res.header("Access-Control-Allow-Methods", corsOptions.methods.join(","));
     res.header("Access-Control-Allow-Headers", corsOptions.allowedHeaders.join(","));
@@ -11,7 +37,6 @@ app.post("/analyze", async (req, res) => {
 
     const userInput = req.body.prompt || "";
 
-    // Detectar tipo de mensaje y obtener el prompt correcto
     const { categoria, prompts } = await obtenerPromptPorMensaje(userInput);
     const promptBase = Array.isArray(prompts?.respuesta_ejemplo)
       ? prompts.respuesta_ejemplo[0]
@@ -19,12 +44,10 @@ app.post("/analyze", async (req, res) => {
 
     const contexto = prompts?.context || "";
 
-    // Cargar análisis MIDI
     const analysisData = JSON.parse(
       fs.readFileSync("./data/extended_midi_analysis.json", "utf-8")
     );
 
-    // Armar conversación para GPT-4
     const messages = [
       { role: "system", content: contexto },
       { role: "user", content: `${userInput}\n\nAnálisis:\n${JSON.stringify(analysisData)}` }
@@ -52,4 +75,10 @@ app.post("/analyze", async (req, res) => {
     console.error("Error en análisis:", error);
     res.status(500).json({ error: "Error al procesar la solicitud." });
   }
+});
+
+// Iniciar servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Backend funcionando en http://localhost:${PORT}`);
 });
