@@ -16,25 +16,25 @@ if (!process.env.OPENAI_API_KEY) {
 
 // Configuración de CORS
 const corsOptions = {
-  origin: function (origin, callback) {
-      const allowedOrigins = [
-          'https://mozairt-app.vercel.app',
-          'https://mozairt-app-git-main-naials-projects.vercel.app'
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true); // Permite el origen
-      } else {
-          callback(new Error('Origen no permitido por CORS')); // Bloquea el origen
-      }
-  },
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 204
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            'https://mozairt-app.vercel.app',
+            'https://mozairt-app-git-main-naials-projects.vercel.app'
+        ];
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true); // Permite el origen
+        } else {
+            callback(new Error('Origen no permitido por CORS')); // Bloquea el origen
+        }
+    },
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
-app.options('/*name', cors(corsOptions)); //  acá está el fix
+app.options('/*name', cors(corsOptions)); // Preflight requests
 
 app.use(express.json());
 
@@ -42,15 +42,28 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
 });
 
-// Routa para analizar el MIDI
+// Ruta para analizar el MIDI
 app.post("/analyze", async (req, res) => {
     try {
-        const userInput = req.body.prompt || "";
+        // Log para verificar si los datos del frontend llegan correctamente
+        console.log("Datos recibidos del frontend:", req.body);
 
-        // Detectar tipo de mensajsse y obtener el prompt adecuado
+        const userInput = req.body.prompt || "";
+        if (!userInput.trim()) {
+            console.error("El prompt está vacío o no válido.");
+            return res.status(400).json({ error: "El prompt no puede estar vacío." });
+        }
+
+        // Log para verificar el prompt recibido
+        console.log("Prompt recibido del usuario:", userInput);
+
+        // Detectar tipo de mensaje y obtener el prompt adecuado
         const { categoria, prompts } = await obtenerPromptPorMensaje(userInput);
+        console.log("Categoría detectada:", categoria);
+        console.log("Prompts obtenidos:", prompts);
 
         if (!prompts || !prompts.respuesta_ejemplo) {
+            console.error("No se encontró un prompt adecuado para la entrada:", userInput);
             return res.status(400).json({ error: "No se pudo determinar el prompt adecuado." });
         }
 
@@ -62,23 +75,28 @@ app.post("/analyze", async (req, res) => {
 
         // Cargar análisis MIDI
         if (!fs.existsSync("./data/extended_midi_analysis.json")) {
+            console.error("Archivo de análisis MIDI no encontrado.");
             return res.status(500).json({ error: "Archivo de análisis MIDI no encontrado." });
         }
 
         let analysisData;
         try {
             analysisData = JSON.parse(fs.readFileSync("./data/extended_midi_analysis.json", "utf-8"));
+            console.log("Datos de análisis MIDI cargados:", analysisData);
         } catch (parseError) {
             console.error("Error al parsear el archivo JSON:", parseError);
             return res.status(500).json({ error: "Error al procesar el archivo de análisis MIDI." });
         }
 
-        // Mensajes para OpenAI
+        // Construir mensajes para OpenAI
         const messages = [
             { role: "system", content: contexto },
             { role: "user", content: `${userInput}\n\nAnálisis:\n${JSON.stringify(analysisData)}` }
         ];
 
+        console.log("Mensajes enviados a OpenAI:", messages);
+
+        // Enviar solicitud a OpenAI
         const openaiResponse = await axios.post(
             "https://api.openai.com/v1/chat/completions",
             {
@@ -94,6 +112,8 @@ app.post("/analyze", async (req, res) => {
                 }
             }
         );
+
+        console.log("Respuesta de OpenAI:", openaiResponse.data);
 
         res.json(openaiResponse.data.choices[0].message.content.trim());
 
