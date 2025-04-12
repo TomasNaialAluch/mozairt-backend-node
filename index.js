@@ -35,21 +35,26 @@ app.post("/analyze", async (req, res) => {
         const prompt = fs.readFileSync("./data/prompt_midi_analysis.txt", "utf-8");
 
         const openaiResponse = await axios.post(
-            "https://api.openai.com/v1/completions", 
+            "https://api.openai.com/v1/chat/completions",
             {
-                model: "gpt-4",
-                prompt: "Hola, como estas?",
-                max_tokens: 500,
-                temperature: 0.7,
+              model: "gpt-4",
+              messages: [
+                {
+                  role: "user",
+                  content: "Hola, como estas?"
+                }
+              ],
+              max_tokens: 500,
+              temperature: 0.7,
             },
             {
-                headers: {
-                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-                    "Content-Type": "application/json",
-                  }
-                  
+              headers: {
+                "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+                "Content-Type": "application/json",
+              }
             }
-        );
+          );
+          
 
         res.json({ suggestions: openaiResponse.data.choices[0].text.trim() });
     } catch (error) {
