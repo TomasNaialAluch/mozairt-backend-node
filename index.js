@@ -47,7 +47,7 @@ app.post("/analyze", async (req, res) => {
     try {
         const userInput = req.body.prompt || "";
 
-        // Detectar tipo de mensaje y obtener el prompt adecuado
+        // Detectar tipo de mensajsse y obtener el prompt adecuado
         const { categoria, prompts } = await obtenerPromptPorMensaje(userInput);
 
         if (!prompts || !prompts.respuesta_ejemplo) {
